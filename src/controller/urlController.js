@@ -8,21 +8,18 @@ const { promisify } = require("util");
 
 //Connect to redis
 const redisClient = redis.createClient(
-  13219,
-  "redis-13219.c264.ap-south-1-1.ec2.cloud.redislabs.com",
+  11972,
+  "redis-11972.c245.us-east-1-3.ec2.cloud.redislabs.com",
   { no_ready_check: true } 
 );
-redisClient.auth("uVRaAgcJvl5Wtrv3ZklTM29ZtRyYpnmE", function (err) {
+redisClient.auth("VUFmRBwC2XsAVoxSnCvAGA0552h0zahM", function (err) {
   if (err) throw err;
 });
 
 redisClient.on("connect", async function () {
   console.log("Connected to Redis..");
 });
-//for emptying cache
-// redisClient.flushdb( function (err, succeeded) {
-//   console.log(succeeded); // will be true if successfull
-// });
+
 const SET_ASYNC = promisify(redisClient.SET).bind(redisClient);
 const GET_ASYNC = promisify(redisClient.GET).bind(redisClient);
 
@@ -30,7 +27,7 @@ const GET_ASYNC = promisify(redisClient.GET).bind(redisClient);
 
 const createUrl = async function(req,res){
     try{
-        if(!req.body) return  res.status(400).send({status:false,message: "Request body can't be empty"})
+        if(Object.keys(req.body).length == 0) return  res.status(400).send({status:false,message: "Request body can't be empty"})
         if(!req.body.longUrl || typeof req.body.longUrl !== 'string') return res.status(400).send({status:false,message: "Please provide original url"})
         let flag=0
         
